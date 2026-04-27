@@ -37,8 +37,8 @@ endmacro()
 if (NOT TARGET eigen)
     FetchContent_Declare(
             eigen #
-            URL https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.zip #
-            URL_HASH MD5=888aab45512cc0c734b3e8f60280daba #
+            URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip
+            #URL_HASH MD5=888aab45512cc0c734b3e8f60280daba #
     )
     fetch(eigen)
     add_library(eigen INTERFACE)
@@ -51,16 +51,16 @@ endif ()
 FetchContent_Declare(
         json #
         GIT_REPOSITORY https://github.com/nlohmann/json.git #
-        GIT_TAG 700b95f4473cac1d900b807541daad0ca3d98f52 #
+        GIT_TAG v3.12.0 #
 )
 fetch_and_add(json)
 
 # -----------------------------------------------------------------------------
-# json
+# libigl
 FetchContent_Declare(
         libigl #
         GIT_REPOSITORY https://github.com/libigl/libigl.git #
-        GIT_TAG 238a607 #
+        GIT_TAG v2.6.0 #
 )
 option(LIBIGL_IMGUI  "Build target igl::imgui"     ON)
 option(LIBIGL_GLFW   "Build target igl::glfw" ON)

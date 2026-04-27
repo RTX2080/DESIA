@@ -184,6 +184,15 @@ void read_puzzle_file(RenderMesh &mesh,
     }
 }
 
+void write_puzzle_file(std::shared_ptr<VoxelizedInterface> &voxel_interface){
+    if(voxel_interface){
+        std::string file_name =  igl::file_dialog_save();
+        if(file_name != "")
+            voxel_interface->output_file(file_name);
+    }
+    return;
+}
+
 void generate_children(RenderMesh &mesh,
                        std::shared_ptr<VoxelizedInterface> &voxel_interface,
                        std::shared_ptr<VoxelizedPuzzleTree> &voxel_tree,
@@ -325,9 +334,10 @@ void create_menu(       std::vector<std::thread> &threads,
         {
             if(ImGui::Button("Read .puz")){
                 read_puzzle_file(mesh, para, colorcoder, voxel_interface, voxel_tree);
+                std::cout << "dasvwjf" << std::endl;
             }
             if(ImGui::Button("Write .puz")){
-
+                write_puzzle_file(voxel_interface);
             }
         }
 
