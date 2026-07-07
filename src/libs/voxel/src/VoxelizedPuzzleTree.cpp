@@ -272,13 +272,16 @@ namespace voxel
     {
         each_part_num_voxels_.clear();
         num_parts_required_ = num_parts;
+        int regular_part_voxels = tot_voxel / num_parts;
+        int remaining_part_voxels = tot_voxel - regular_part_voxels * (num_parts - 1);
         for(int id = 0; id < num_parts; id++)
         {
-            each_part_num_voxels_.push_back(tot_voxel/num_parts);
+            each_part_num_voxels_.push_back(regular_part_voxels);
         }
-        int remain_voxel = tot_voxel % num_parts;
-        for(int id = num_parts - remain_voxel; id < num_parts; id++)
-            each_part_num_voxels_[id] ++;
+        if(num_parts > 0)
+        {
+            each_part_num_voxels_[0] = remaining_part_voxels;
+        }
     }
 
     void VoxelizedPuzzleTree::set_root(std::shared_ptr<VoxelizedPuzzle> puzzle)

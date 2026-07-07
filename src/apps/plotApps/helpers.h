@@ -13,6 +13,7 @@
 #include "voxel/VoxelizedPuzzle.h"
 #include <thread>
 #include <future>
+#include <iostream>
 
 using namespace voxel;
 
@@ -22,6 +23,20 @@ struct RenderMesh{
     Eigen::MatrixXd C;
     bool redraw = false;
 };
+
+void print_part_voxel_counts(const std::shared_ptr<VoxelizedPuzzle> &puzzle)
+{
+    if(!puzzle) return;
+    int total_voxels = 0;
+    std::cout << "Part voxel counts:" << std::endl;
+    for(int id = 0; id < puzzle->parts_.size(); id++)
+    {
+        int num_voxels = puzzle->parts_[id]->elist_.data_.size();
+        total_voxels += num_voxels;
+        std::cout << "part:\t" << id << ", voxel:\t" << num_voxels << std::endl;
+    }
+    std::cout << "total voxels:\t" << total_voxels << std::endl;
+}
 
 enum RenderType
 {
@@ -174,11 +189,7 @@ void read_puzzle_file(RenderMesh &mesh,
         voxel_tree->set_root(puzzle);
         voxel_tree->present_nodes_ = voxel_tree->root();
         voxel_interface = puzzle->output_assembly_interface(true, true);
-        for(int id = 0; id < puzzle->parts_.size(); id++)
-        {
-            std::cout << "part:\t" << id << ", voxel:\t" << puzzle->parts_[id]->elist_.data_.size() << std::endl;
-        }
-        std::cout << "total voxels:\t" << puzzle->voxel_.size() << std::endl;
+        print_part_voxel_counts(puzzle);
 
         compute_puzzle_mesh(mesh, voxel_interface, para);
     }
@@ -207,6 +218,7 @@ void generate_children(RenderMesh &mesh,
             para.interlock_present_child = 0;
             voxel_tree->present_nodes_ = voxel_tree->present_nodes_->child[0].get();
             voxel_interface = voxel_tree->present_nodes_->puzzle_->output_assembly_interface(true, true);
+            print_part_voxel_counts(voxel_tree->present_nodes_->puzzle_);
             compute_puzzle_mesh(mesh, voxel_interface, para);
         }
     }
@@ -276,6 +288,7 @@ void automatic_search(RenderMesh &mesh,
             tot_timer->end();
             tot_timer->print();
             voxel_interface = voxel_tree->present_nodes_->puzzle_->output_assembly_interface(true, true);
+            print_part_voxel_counts(voxel_tree->present_nodes_->puzzle_);
             compute_puzzle_mesh(mesh, voxel_interface, para);
         }
     }
